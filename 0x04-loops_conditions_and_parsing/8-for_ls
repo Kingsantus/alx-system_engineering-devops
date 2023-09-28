@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Print the part of the filename after the
+# first dash for all files in the current directory
+
+FILE_LIST=$(ls -1)
+
+for file in $FILE_LIST
+do
+	echo "${file#*-}"
+done
