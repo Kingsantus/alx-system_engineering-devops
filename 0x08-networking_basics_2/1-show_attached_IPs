@@ -1,5 +1,5 @@
 #!/bin/bash
 ips=$(ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 for ip in $ips; do
-    echo $ip
+    echo "$ip"
 done
