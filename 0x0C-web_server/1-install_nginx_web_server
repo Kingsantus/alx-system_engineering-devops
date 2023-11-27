@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# this script automates ths installation of nginx
+
+# installing nginx
+apt-get -y update
+apt-get -y install nginx
+
+# set nginx to listen on port 80
+ufw allow 'Nginx HTTP'
+
+# set up nginx default landing page
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+
+service nginx restart
