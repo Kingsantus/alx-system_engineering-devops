@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# This script installs and configures a HAProxy on a server
+
+# Updates
+sudo apt -y update
+sudo apt -y upgrade
+
+# Installation
+sudo apt-get -y install --no-install-recommends software-properties-common
+sudo add-apt-repository -y ppa:vbernat/haproxy-2.8
+sudo apt-get -y install haproxy=2.8.\*
+
+# Configuration
+sed -i "/127.0.0.1 localhost/a 35.153.18.125 10323-lb-01\n34.224.6.149 10323-web-02\n54.236.25.169 10323-web-01" /etc/hosts
+{
+        echo -e "# Configurations for web servers"
+        echo -e "\nfrontend web_frontend"
+        echo -e "\tbind *:80"
+        echo -e "\tmode http"
+        echo -e "\toption h1-case-adjust-bogus-client"
+        echo -e "\tdefault_backend web_backend"
+        echo -e "\nbackend web_backend"
+        echo -e "\tbalance roundrobin"
+        echo -e "\tserver 10323-web-01 54.236.25.169:80 check"
+        echo -e "\tserver 10323-web-02 34.224.6.149:80 check"
+} >> /etc/haproxy/haproxy.cfg
+
+sudo systemctl restart haproxy
+
