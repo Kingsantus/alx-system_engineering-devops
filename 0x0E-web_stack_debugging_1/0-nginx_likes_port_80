@@ -2,26 +2,29 @@
 
 # Check if Nginx is installed
 if ! command -v nginx &> /dev/null; then
+    echo "Nginx is not installed. Please install Nginx first."
     exit 1
 fi
 
 # Check Nginx configuration
 nginx -t
 if [ $? -ne 0 ]; then
+    echo "Nginx configuration test failed. Check the configuration."
     exit 1
 fi
 
 # Check for processes on port 80
 if lsof -i :80; then
+    echo "There is another process already listening on port 80. Please free up the port."
     exit 1
 fi
 
 # Check Nginx service status
 if systemctl is-active --quiet nginx; then
-	:
+    :
 else
     sudo service nginx start
-    sleep 2
+    sleep 2  # Allow time for Nginx to start
 fi
 
 # Update Nginx configuration to listen on port 80
