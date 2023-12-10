@@ -1,4 +1,41 @@
 #!/usr/bin/env bash
 # Configure nginx for connection on port 80
-sudo sed -i 's/8080 default_server/80 default_server/g' /etc/nginx/sites-enabled/default
-sudo service nginx restart
+# sudo sed -i 's/8080 default_server/80 default_server/g' /etc/nginx/sites-enabled/default
+# sudo service nginx restart
+
+# Check if Nginx is installed
+if ! command -v nginx &> /dev/null; then
+    echo "Nginx is not installed. Please install Nginx first."
+    exit 1
+fi
+
+# Check Nginx configuration
+nginx -t
+if [ $? -ne 0 ]; then
+    echo "Nginx configuration test failed. Check the configuration."
+    exit 1
+fi
+
+# Check for processes on port 80
+if lsof -i :80; then
+    echo "There is another process already listening on port 80. Please free up the port."
+    exit 1
+fi
+
+# Check Nginx service status
+systemctl status nginx | grep "Active: active" &> /dev/null
+if [ $? -ne 0 ]; then
+    echo "Nginx service is not running. Starting Nginx..."
+    systemctl start nginx
+    sleep 2  # Allow time for Nginx to start
+fi
+
+# Update Nginx configuration to listen on port 80
+sed -i 's/listen\s*80;/listen 80 default_server;/g' /etc/nginx/sites-available/default
+
+# Restart Nginx
+systemctl restart nginx
+
+echo "Nginx has been configured to listen on port 80."
+
+exit 0
