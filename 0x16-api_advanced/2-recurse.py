@@ -9,7 +9,7 @@ def recurse(subreddit, hot_list=[], next_page=None, count=0):
     """Request subreddit recursively using pagination
     """
     # set custom user-agent
-    user_agent = '0x16-api_advanced-jmajetich'
+    user_agent = 'YourBotName/1.0'
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
     # if page specified, pass as parameter
     if next_page:

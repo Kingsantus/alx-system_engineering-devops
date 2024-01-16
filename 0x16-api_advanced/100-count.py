@@ -16,7 +16,7 @@ def count_words(subreddit, word_list, count_list=[], next_page=None):
 
     # NETWORKING
     # set custom user-agent
-    user_agent = '0x16-api_advanced-jmajetich'
+    user_agent = 'YourBotName/1.0'
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
     # if page specified, pass as parameter
     if next_page:

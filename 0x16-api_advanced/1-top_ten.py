@@ -11,7 +11,7 @@ def top_ten(subreddit):
     from Reddit API
     """
     # set custom user-agent
-    user_agent = '0x16-api_advanced-jmajetich'
+    user_agent = 'YourBotName/1.0'
     url = 'https://www.reddit.com/r/{}/hot.json?limit=10'.format(subreddit)
 
     # custom user-agent avoids request limit
