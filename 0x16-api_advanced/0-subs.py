@@ -9,23 +9,25 @@ def number_of_subscribers(subreddit):
     from Reddit API
     """
     # Set custom user-agent
-    user_agent = '0x16-api_advanced-jmajetich'
+    user_agent = '0x16-api_advanced-kingsantus'
     url = f'https://www.reddit.com/r/{subreddit}/about.json'
 
     # Custom user-agent avoids request limit
     headers = {'User-Agent': user_agent}
 
-    # Use allow_redirects=False to avoid following redirects
-    r = requests.get(url, headers=headers, allow_redirects=False)
-
-    if r.status_code != 200:
+    try:
+        r = requests.get(url, headers=headers, allow_redirects=False)
+        r.raise_for_status()  # Raise an exception for bad responses (4xx or 5xx)
+    except requests.exceptions.RequestException as e:
+        # Handle exceptions, for example, if there's a network error
+        print(f"Error: {e}")
         return 0
 
-    # Load response unit from JSON
-    data = r.json()['data']
-    # Extract list of pages
-    pages = data['children']
-    # Extract data from the first page
-    page_data = pages[0]['data']
-    # Return the number of subreddit subs
-    return page_data['subreddit_subscribers']
+    if r.status_code == 200:
+        # Parse the JSON response
+        data = r.json()
+
+        # Extract and return the number of subscribers
+        return data['data']['subscribers']
+    else:
+        return 0
