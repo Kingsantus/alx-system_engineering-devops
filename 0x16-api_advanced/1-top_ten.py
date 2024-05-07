@@ -5,26 +5,24 @@
 
 import requests
 
-
 def top_ten(subreddit):
-    """Request top ten hot posts of subreddit
-    from Reddit API
     """
-    # set custom user-agent
-    user_agent = 'YourBotName/1.0'
-    url = 'https://www.reddit.com/r/{}/hot.json?limit=10'.format(subreddit)
+    Prints the top 10 hot posts in a subreddit.
+    """
+    url = f'https://www.reddit.com/r/{subreddit}/hot.json?limit=10'
 
-    # custom user-agent avoids request limit
-    headers = {'User-Agent': user_agent}
+    headers = {
+        'User-Agent' : "ALX"
+    }
 
-    r = requests.get(url, headers=headers, allow_redirects=False)
-
-    if r.status_code != 200:
-        print('None')
-    else:
-        # load response unit from json
-        data = r.json()['data']
-        # extract list of pages
-        posts = data['children']
+    try:
+        response = requests.get(url, headers=headers, allow_redirects=False)
+        if response.status_code != 200:
+            print(None)
+            return
+        data = response.json()
+        posts = data['data']['children']
         for post in posts:
             print(post['data']['title'])
+    except Exception as e:
+        print(None)
