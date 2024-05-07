@@ -4,29 +4,27 @@
 
 import requests
 
-
 def number_of_subscribers(subreddit):
-    """Request number of subscribers of subreddit
-    from Reddit API
-    """
-    # set custom user-agent
-    user_agent = 'YourBotName/1.0'
-    url = 'https://www.reddit.com/r/{}.json'.format(subreddit)
+    url = f"https://www.reddit.com/r/{subreddit}/about.json"
 
-    # custom user-agent avoids request limit
-    headers = {'User-Agent': user_agent}
+    headers = {
+        'User-Agent': "MyRedditBot/1.0"
+    }
 
-    r = requests.get(url, headers=headers, allow_redirects=False)
+    try:
+        response = requests.get(url, headers=headers, allow_redirects=False)
+        
+        # Step 4: Check Response Status
+        if response.status_code != 200:
+            return 0
 
-    if r.status_code != 200:
+        # Step 5: Parse JSON Response
+        data = response.json()
+        subscribers = data['data']['subscribers']
+
+        # Step 9: Return Number of Subscribers
+        return subscribers
+    except Exception as e:
+        # Step 8: Handle Invalid Subreddit
+        print(f"An error occurred: {e}")
         return 0
-
-    # load response unit from json
-    data = r.json()['data']
-    # extract list of pages
-    pages = data['children']
-    # extract data from first page
-    page_data = pages[0]['data']
-    # return number of subreddit subs
-    return page_data['subreddit_subscribers']
-
