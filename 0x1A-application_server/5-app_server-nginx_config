@@ -26,7 +26,7 @@ server {
         # Add index.php to the list if you are using PHP
         #index index.html index.htm index.nginx-debian.html;
 
-        server_name 35.153.57.159;
+        server_name 100.25.110.19;
 
         # Customize HTTP response header
         add_header X-Served-By 232614-web-01;
